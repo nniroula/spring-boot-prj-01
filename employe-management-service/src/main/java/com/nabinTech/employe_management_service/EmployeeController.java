@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -74,5 +75,26 @@ public class EmployeeController {
 	public void deleteEmployeeById(@PathVariable int id){
 		employeeList.removeIf(emp -> emp.getId() == id);
 	}
+	
+	// use @RequestParam in parameter if you need to take input from the query string(url) in postman
+	// http method is PUT in postman
+	// In postman, for query params, key is percentage(comes from parameter with @RequestParam) and 
+	// value is a number you provide
+	@PutMapping("/employee/salary/{id}")
+	public void incrementSalaryByPercent(@PathVariable int id,
+			@RequestParam int percentage) {
+		for(Employee emp: employeeList) {
+			double currentSalary = emp.getSalary();
+			double increment = currentSalary * percentage/100;
+			emp.setSalary(currentSalary + increment);
+		}
+		
+	}
+	
+	/*
+	 * To take mulitple input values use @RequestBody
+	 * To take one input from query string, use @RequestParam
+	 * To identify a resource(like a user), use @PathVariable
+	 */
 
 }
